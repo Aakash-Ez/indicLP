@@ -10,14 +10,14 @@ def read(fname):
 setup(
   name = 'indicLP',         # How you named your package folder (MyLib)
   packages = find_packages(),   # Chose the same as "name"
-  version = '0.0.1x',      # Start with a small number and increase it with every change you make
+  version = '0.1.0a',      # Start with a small number and increase it with every change you make
   license='MIT',        # Chose a license from here: https://help.github.com/articles/licensing-a-repository
   description = 'indicLP is python package developed specifically to perform NLP tasks on Indic Languages like Hindi and Tamil, to make the world of AI a more inclusive space.',   # Give a short description about your library
   author = 'Aakash Ezhilan & Adityan Sunil Kumar',                   # Type in your name
   author_email = 'aakash.ezhilan@gmail.com',      # Type in your E-Mail
   url = 'https://github.com/Aakash-Ez/indicLP',   # Provide either the link to your github or to your website
-  download_url = 'https://github.com/Aakash-Ez/indicLP/archive/refs/tags/stable.tar.gz',    # I explain this later on
-  long_description=read('README.md'),
+  download_url = 'https://github.com/Aakash-Ez/indicLP/archive/refs/tags/main.tar.gz',    # I explain this later on
+  #long_description=read('README.rst'),
   include_package_data=True,
   package_data={
     "assets":["assets/embed_models/word2vec.hi.model","assets/embed_models/word2vec.ta.model",

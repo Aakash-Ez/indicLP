@@ -1,0 +1,6 @@
+torch>=1.9.1
+torchtext>=0.10.1
+gensim>=4.0.0
+numpy>=1.19.1
+indic_transliteration
+snowballstemmer
