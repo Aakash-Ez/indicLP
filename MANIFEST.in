@@ -1,0 +1,11 @@
+#embed
+include indicLP/assets/embed_models/word2vec.hi.model
+include indicLP/assets/embed_models/word2vec.ta.model
+
+#stopwords
+include indicLP/assets/stopwords/hi/stopwords.pkl
+include indicLP/assets/stopwords/ta/stopwords.pkl
+
+#tokenizer
+include indicLP/assets/tokenizer_models/hi/token.model
+include indicLP/assets/tokenizer_models/ta/token.model
