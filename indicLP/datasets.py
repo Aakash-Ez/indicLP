@@ -38,12 +38,15 @@ corpus_data = [
 corpus_names = [name["name"] for name in corpus_data]
 class Dataset:
     def __init__(self):
-        self.location = getcwd()        
+        self.location = pathlib.PurePath(getcwd())        
+        self.dataset_loc = self.location / pathlib.PurePath("datasets")
+        if not _path.exists(self.dataset_loc):
+            mkdir(self.dataset_loc)
 
     def extractGz(self, filepath, folder):
         print("Extracting gz file to datasets folder")
-        file = tarfile.open(filepath)
-        file.extractall("./datasets\\"+ folder)
+        file = tarfile.open(pathlib.PurePath(filepath))
+        file.extractall(pathlib.PurePath("./datasets\\"+ folder))
         file.close()
 
     def getDetails(self, dataset):
@@ -56,14 +59,14 @@ class Dataset:
     def downloadFromKaggle(self, url, name):
         api = KaggleApi()
         api.authenticate()
-        api.dataset_download_files(url,"./datasets\\")
-        mkdir("./datasets\\"+name)
-        zf = zipfile.ZipFile("./datasets\\"+name+".zip")
-        zf.extractall("./datasets\\"+name)
+        api.dataset_download_files(url,self.location / pathlib.PurePath("datasets"))
+        file_loc = self.dataset_loc / pathlib.PurePath(name)
+        zf = zipfile.ZipFile(self.dataset_loc / pathlib.PurePath(name+".zip"))
+        zf.extractall(file_loc)
         zf.close()
 
     def downloadDataset(self, dataset):
-        assert dataset in csv_names or dataset in corpus_names, "Dataset not supported, supported datasets" + "Datasets: "+str(csv_names) + "\nCorpus: "+ str(corpus_names)
+        assert dataset in csv_names or dataset in corpus_names, "Dataset not supported, supported datasets" + str(csv_names)
         # downloadData = {}
         downloadData = self.getDetails(dataset)
         url = downloadData["url"]
@@ -73,23 +76,27 @@ class Dataset:
         else:
             file_path = parse.urlparse(url).path
             file_name = pathlib.PurePath(file_path).name
-            filename, headers = request.urlretrieve(url, filename=self.location + "\\datasets\\"+file_name)
-            print(filename)
-            if pathlib.Path(filename).suffix == ".gz":
+            filename, headers = request.urlretrieve(url, filename=self.dataset_loc / pathlib.PurePath(file_name))
+            # print(filename)
+            if pathlib.PurePath(filename).suffix == ".gz":
                 self.extractGz(filename, dataset)
             print ("download complete!")
 
 
     def list_datasets(self):
-        for key in srcs.keys:
-            print(key + " "+ srcs.key)
+        for name in csv_names:
+            print(name)
+
+    def list_corpus(self):
+        for name in corpus_names:
+            print(name)
     
     def load_corpus(self, dataset):
         assert dataset in corpus_data
     
     def load_dataset(self, dataset_name, combine = False):
         assert dataset_name in csv_names or dataset_name in corpus_names, "Dataset not supported, supported datasets" + "Datasets: "+str(csv_names) + "\nCorpus: "+ str(corpus_names)
-        path = self.location + "\\datasets\\" + dataset_name
+        path = pathlib.PurePath(self.dataset_loc /  pathlib.PurePath(dataset_name))
         details = self.getDetails(dataset_name)
         if not pathlib.Path(path).exists():
             print("Dataset not downloaded, do you want to download it (y/n)")
@@ -102,7 +109,7 @@ class Dataset:
         if dataset_name in csv_names:
             for files in listdir(path):
                 if files.endswith(".csv"):
-                    pd_dataset = pd.read_csv(str(path+"\\"+files), sep = details["sep"])
+                    pd_dataset = pd.read_csv(str((path / pathlib.PurePath(files))), sep = details["sep"])
                     return pd_dataset
                         # if files.find("train") != -1:
                         # print(path+"\\"+files)
@@ -119,9 +126,9 @@ class Dataset:
         else:
             if combine:
                 if dataset_name+"_combine.txt" in listdir(path):
-                    return [path+"\\"+dataset_name+"_combine.txt"]
+                    return [path / pathlib.PurePath(dataset_name+"_combine.txt")]
                 self.combineFiles(path, dataset_name)
-                return [path+"\\"+dataset_name+"_combine.txt"]
+                return [path / pathlib.PurePath(dataset_name+"_combine.txt")]
             else:
                 path_list = []
                 for root, dirs, files in walk(path):
@@ -131,7 +138,8 @@ class Dataset:
                 return path_list
 
     def combineFiles(self, path, dataset_name):
-        combine = codecs.open("datasets\\"+dataset_name+"\\"+dataset_name+"_combine.txt","w+","utf-8")
+        file_loc = self.dataset_loc / pathlib.PurePath(dataset_name)
+        combine = codecs.open(file_loc / pathlib.PurePath(dataset_name+"_combine.txt"),"w+","utf-8")
         for root, dirs, files in walk(path):
             for file in files:
                 if file.endswith(".txt"):
@@ -145,7 +153,7 @@ class Dataset:
 
 if __name__ == "__main__":
     dt = Dataset()
-    data = dt.load_dataset("ponniyin-selvan",True)
+    data = dt.load_dataset("ponniyin-selvan", True)
     if isinstance(data, pd.DataFrame):
         print(data.head())
     else:
