@@ -111,24 +111,12 @@ class Dataset:
                 if files.endswith(".csv"):
                     pd_dataset = pd.read_csv(str((path / pathlib.PurePath(files))), sep = details["sep"])
                     return pd_dataset
-                        # if files.find("train") != -1:
-                        # print(path+"\\"+files)
-                        # tempfile = open(path+"\\"+files, encoding="utf-8") 
-                        # line = tempfile.readline()
-                        # print(line);
-                        # sep = csv.Sniffer().sniff(line).escapechar
-                        # print("Sep "+details["sep"])
-                        # train = pd.read_csv(str(path+"\\"+files),sep = '\t')
-                        # print(train.head())
-                    # if files.find("test") != -1:
-                        # test = pd.read_csv(str(path + "\\" + files),sep='\t')
-                        # print(test.head())
         else:
             if combine:
                 if dataset_name+"_combine.txt" in listdir(path):
-                    return [path / pathlib.PurePath(dataset_name+"_combine.txt")]
+                    return [str(path / pathlib.PurePath(dataset_name+"_combine.txt"))]
                 self.combineFiles(path, dataset_name)
-                return [path / pathlib.PurePath(dataset_name+"_combine.txt")]
+                return [str(path / pathlib.PurePath(dataset_name+"_combine.txt"))]
             else:
                 path_list = []
                 for root, dirs, files in walk(path):
