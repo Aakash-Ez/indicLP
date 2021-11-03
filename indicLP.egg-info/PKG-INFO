@@ -1,12 +1,12 @@
 Metadata-Version: 1.1
 Name: indicLP
-Version: 0.1.0a0
+Version: 0.1.1
 Summary: indicLP is python package developed specifically to perform NLP tasks on Indic Languages like Hindi and Tamil, to make the world of AI a more inclusive space.
 Home-page: https://github.com/Aakash-Ez/indicLP
 Author: Aakash Ezhilan & Adityan Sunil Kumar
 Author-email: aakash.ezhilan@gmail.com
 License: MIT
-Download-URL: https://github.com/Aakash-Ez/indicLP/archive/refs/tags/main.tar.gz
+Download-URL: https://github.com/Aakash-Ez/indicLP/archive/refs/tags/v0.1.1.tar.gz
 Description: UNKNOWN
 Keywords: Indic Natural Language Processing,Natural Language Processing,NLP,Hindi,Tamil,PyTorch
 Platform: UNKNOWN
